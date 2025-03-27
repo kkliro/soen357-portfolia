@@ -1,56 +1,66 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
-from rest_framework import status
-from .serializers import AccountSerializer
+from rest_framework import status, permissions
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authentication import TokenAuthentication
+from .serializers import AccountCreateSerializer, AccountUpdateSerializer
 from account.models import Account
 from django.shortcuts import get_object_or_404
 
-@api_view(['GET', ])
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsAdminUser])
 def account_list(request):
     """
-    List all accounts.
+    List all accounts (Superuser only).
     """
     accounts = Account.objects.all()
-    serializer = AccountSerializer(accounts, many=True)
+    serializer = AccountCreateSerializer(accounts, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
 def account_create(request):
     """
-    Create a new account.
+    Create a new account (No authentication required).
     """
-    serializer = AccountSerializer(data=request.data)
+    serializer = AccountCreateSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def account_detail(request, pk):
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def account_detail(request):
     """
-    Retrieve a account instance.
+    Retrieve the authenticated user's account instance.
     """
-    account = get_object_or_404(Account, pk=pk)
-    serializer = AccountSerializer(account)
+    account = get_object_or_404(Account, pk=request.user.pk)
+    serializer = AccountCreateSerializer(account)
     return Response(serializer.data)
 
 @api_view(['PUT'])
-def account_update(request, pk):
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def account_update(request):
     """
-    Update a account instance.
+    Update the authenticated user's account instance.
     """
-    account = get_object_or_404(Account, pk=pk)
-    serializer = AccountSerializer(account, data=request.data)
+    account = get_object_or_404(Account, pk=request.user.pk)
+    serializer = AccountUpdateSerializer(account, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def account_delete(request, pk):
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def account_delete(request):
     """
-    Delete a account instance.
+    Delete the authenticated user's account instance.
     """
-    account = get_object_or_404(Account, pk=pk)
+    account = get_object_or_404(Account, pk=request.user.pk)
     account.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'account',
     'authentication',
     'strategy',
+    'portfolio',
 ]
 
 MIDDLEWARE = [

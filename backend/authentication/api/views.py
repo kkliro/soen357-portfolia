@@ -25,7 +25,7 @@ def login(request):
 
     return Response({'token': token.key, 'user': user_serializer.data}, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+@api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):

@@ -5,6 +5,7 @@ import LandingPage from './pages/landingPage'
 import LoginPage from './pages/loginPage'
 // import CreateAccountPage from './pages/createAccountPage'
 import { AuthProvider } from './context/AuthContext'
+import PrivateRoute from './components/PrivateRoute'
 import './App.css'
 
 function App() {
@@ -15,7 +16,11 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           {/* <Route path="/signup" element={<CreateAccountPage />} /> */}
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/home" element={
+            <PrivateRoute>
+              <HomePage />
+            </PrivateRoute>
+          }/>
         </Routes>
       </Router>
     </AuthProvider>

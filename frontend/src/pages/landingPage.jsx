@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   const [chartData, setChartData] = useState([]);
@@ -75,9 +76,13 @@ const LandingPage = () => {
       <div className="relative z-20 w-full">
         <nav className="fixed top-0 w-full bg-black bg-opacity-70 backdrop-blur-lg z-50 px-6 py-4 flex justify-between items-center border-b border-purple-900">
           <div className="text-2xl font-bold text-purple-400">Portfolia</div>
-          <div className="flex gap-4">
-            <button className="px-4 py-2 text-purple-400 hover:text-white transition">Log In</button>
-            <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition">Sign Up</button>
+          <div className="flex gap-4 mt-4">
+            <Link to="/login">
+              <button className="px-4 py-2 bg-indigo-600 rounded-lg">Login</button>
+            </Link>
+            <Link to="/signup">
+              <button className="px-4 py-2 bg-purple-600 rounded-lg">Sign Up</button>
+            </Link>
           </div>
         </nav>
 

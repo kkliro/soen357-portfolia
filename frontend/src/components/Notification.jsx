@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-export default function Notification({ message, onClear, duration = 3000 }) {
+export default function Notification({ message, onClear, duration = 3000, success = false }) {
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -14,7 +14,7 @@ export default function Notification({ message, onClear, duration = 3000 }) {
 
   return (
     <>
-      <div className="notification fixed top-0 left-0 w-full bg-red-500 text-white p-4 text-center z-50">
+      <div className={`notification fixed top-0 left-0 w-full ${success ? 'bg-green-500' : 'bg-red-500'} text-white p-4 text-center z-50`}>
         {message}
       </div>
       <style jsx>{`

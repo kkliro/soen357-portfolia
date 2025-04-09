@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { portfolioPerformance } from '../hooks/portfolio.js';
+import ChatbotComponent from '../components/chatbotComponent.jsx';
 
 export default function HomePage() {
   const { token } = useContext(AuthContext);
@@ -226,6 +227,7 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+      <ChatbotComponent />
     </div>
   );
 }

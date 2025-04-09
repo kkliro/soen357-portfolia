@@ -61,81 +61,85 @@ export default function PortfolioCard({ portfolio, onPortfolioUpdated }) {
   };
 
   return (
-    <div className="bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white flex">
-      {/* Left column: Portfolio icon */}
-      <div className="flex-shrink-0 flex items-center justify-center mr-6">
-        <FaFolder className="text-4xl" />
-      </div>
-
-      {/* Right column: Portfolio info and actions */}
-      <div className="flex-1">
-        {/* Header row with title/input and buttons */}
-        <div className="flex justify-between items-center mb-2">
+    <div className="bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white ring-2 ring-indigo-500 flex flex-col">
+      {/* Header with icon and title */}
+      <div className="border-b border-indigo-700 pb-2 mb-4 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <FaFolder className="text-4xl" />
           {isEditing ? (
             <input
               name="name"
               type="text"
               value={editablePortfolio.name}
               onChange={handleChange}
-              className="bg-white text-black p-2 rounded-md w-full mr-4"
+              className="bg-white text-black p-2 rounded-md text-2xl font-bold"
               placeholder="Portfolio Name"
             />
           ) : (
-            <h3 className="text-xl font-semibold">{portfolio.name}</h3>
+            <h3 className="text-2xl font-bold">{portfolio.name}</h3>
           )}
-          <div className="flex space-x-2">
-            {isEditing ? (
-              <>
-                <button
-                  onClick={handleCancel}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-4 py-2 text-sm font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-4 py-2 text-sm font-medium"
-                >
-                  Save
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-4 py-2 text-sm font-medium"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-4 py-2 text-sm font-medium"
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          </div>
         </div>
+        <div className="flex space-x-2">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleCancel}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+              >
+                Save
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
+      </div>
 
-        {/* Body content */}
-        {isEditing ? (
-          <>
+      {/* Body content */}
+      {isEditing ? (
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-medium">Description:</label>
             <textarea
               name="description"
               value={editablePortfolio.description}
               onChange={handleChange}
-              className="bg-white text-black p-2 rounded-md mb-2 w-full"
+              className="bg-white text-black p-2 rounded-md w-full"
               placeholder="Description"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Strategy:</label>
             <input
               name="strategy"
               type="text"
               value={editablePortfolio.strategy}
               onChange={handleChange}
-              className="bg-white text-black p-2 rounded-md mb-2 w-full"
+              className="bg-white text-black p-2 rounded-md w-full"
               placeholder="Strategy"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium">Currency:</label>
             <select
               name="currency"
               value={editablePortfolio.currency}
@@ -148,32 +152,41 @@ export default function PortfolioCard({ portfolio, onPortfolioUpdated }) {
                 </option>
               ))}
             </select>
-          </>
-        ) : (
-          <>
-            <p className="mb-2">{portfolio.description}</p>
-            <div className="text-sm mb-1">
-              <span className="font-medium">Strategy:</span> {portfolio.strategy}
-            </div>
-            <div className="text-sm mb-1">
-              <span className="font-medium">Currency:</span> {portfolio.currency}
-            </div>
-            <div className="mt-2 text-xs text-gray-400">
-              <p>
-                <span className="font-medium">ID:</span> {portfolio.id}
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col space-y-2">
+              <p className="flex items-center">
+                <span className="font-medium mr-2">Description:</span>
+                <span>{portfolio.description}</span>
               </p>
-              <div className="flex">
-                <div className="mr-4">
-                  <span className="font-medium">Created:</span> {new Date(portfolio.created_at).toLocaleString()}
-                </div>
-                <div>
-                  <span className="font-medium">Updated:</span> {new Date(portfolio.updated_at).toLocaleString()}
-                </div>
-              </div>
+              <p className="flex items-center">
+                <span className="font-medium mr-2">Strategy:</span>
+                <span>{portfolio.strategy}</span>
+              </p>
             </div>
-          </>
-        )}
-      </div>
+            <div className="flex flex-col space-y-2">
+              <p className="flex items-center">
+                <span className="font-medium mr-2">Currency:</span>
+                <span>{portfolio.currency}</span>
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-4 text-xs text-gray-400">
+            <p>
+              <span className="font-medium">ID:</span> {portfolio.id}
+            </p>
+            <p>
+              <span className="font-medium">Created:</span> {new Date(portfolio.created_at).toLocaleString()}
+            </p>
+            <p>
+              <span className="font-medium">Updated:</span> {new Date(portfolio.updated_at).toLocaleString()}
+            </p>
+          </div>
+        </>
+      )}
 
       {notification.message && (
         <Notification

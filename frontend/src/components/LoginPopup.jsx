@@ -1,21 +1,29 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import logo from '../assets/logo.png'
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
+import { loginUser } from '../hooks/auth/login'
+import Notification from '../components/Notification'
 
 export default function LoginPopup({ closeModal }) {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
+  const { saveToken } = useContext(AuthContext)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("Logging in with:", formData)
-    closeModal()
+    setError('')
+    try {
+      const data = await loginUser(email, password)
+      saveToken(data.token)
+      navigate('/home')
+      closeModal()
+    } catch (err) {
+      console.error('Login failed:', err)
+      setError('Login failed. Please check your credentials and try again.')
+    }
   }
 
   return (
@@ -31,6 +39,9 @@ export default function LoginPopup({ closeModal }) {
             &#x2715;
           </button>
         </div>
+
+        {/* Notification */}
+        <Notification message={error} onClear={() => setError('')} />
 
         {/* Header */}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -54,8 +65,8 @@ export default function LoginPopup({ closeModal }) {
                   type="email"
                   required
                   autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="block w-full rounded-md bg-black bg-opacity-40 border border-purple-700 px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-500"
                 />
               </div>
@@ -77,8 +88,8 @@ export default function LoginPopup({ closeModal }) {
                   type="password"
                   required
                   autoComplete="current-password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="block w-full rounded-md bg-black bg-opacity-40 border border-purple-700 px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-500"
                 />
               </div>

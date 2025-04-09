@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import HeaderComponent from '../components/HeaderComponent.jsx';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { listPortfolios } from '../hooks/portfolio.js';
-import PortfolioCard from '../components/portfolioCard.jsx';
+import PortfolioCard from '../components/PortfolioCard.jsx';
 import CreatePortfolioPopup from '../components/CreatePortfolioPopup.jsx';
 
 export default function PortfolioPage() {
@@ -10,6 +10,7 @@ export default function PortfolioPage() {
   const [portfolios, setPortfolios] = useState([]);
   const [error, setError] = useState(null);
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState(false);
+  const [selectedPortfolio, setSelectedPortfolio] = useState(null); // Track expanded portfolio
 
   const fetchPortfolios = async () => {
     try {
@@ -46,10 +47,13 @@ export default function PortfolioPage() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {portfolios.map((portfolio) => (
-            <PortfolioCard 
-              key={portfolio.id} 
-              portfolio={portfolio} 
-              onPortfolioUpdated={fetchPortfolios} 
+            <PortfolioCard
+              key={portfolio.id}
+              portfolio={portfolio}
+              isExpanded={selectedPortfolio === portfolio.id} // Pass expanded state
+              onExpand={() => setSelectedPortfolio(portfolio.id)} // Expand this card
+              onContract={() => setSelectedPortfolio(null)} // Contract the card
+              onPortfolioUpdated={fetchPortfolios}
             />
           ))}
         </div>

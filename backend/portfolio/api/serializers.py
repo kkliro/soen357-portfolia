@@ -13,7 +13,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
 class PortfolioCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
-        fields = ['name', 'account', 'strategy', 'description', 'strategy', 'currency', 'created_at']
+        fields = '__all__'
         read_only_fields = ['id', 'account', 'created_at', 'updated_at']
 
 class PortfolioUpdateSerializer(serializers.ModelSerializer):

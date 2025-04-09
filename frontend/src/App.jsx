@@ -5,6 +5,7 @@ import LandingPage from './pages/landingPage'
 import LoginPage from './pages/loginPage'
 import PortfolioPage from './pages/portfolioPage'
 import StrategyPage from './pages/strategyPage'
+import MarketPage from './pages/marketPage'
 // import CreateAccountPage from './pages/createAccountPage'
 import { AuthProvider } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
@@ -34,6 +35,12 @@ function App() {
               <StrategyPage />
             </PrivateRoute>
           }/>
+
+          <Route path="/markets" element={
+            <PrivateRoute>
+              <MarketPage />
+            </PrivateRoute>
+          }/> 
         </Routes>
       </Router>
     </AuthProvider>

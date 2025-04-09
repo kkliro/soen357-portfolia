@@ -19,20 +19,17 @@ import { subDays, format } from 'date-fns';
 export default function MarketPage() {
     const { token } = useContext(AuthContext);
 
-    // Top indexes
     const indexSymbols = [
         { symbol: "^GSPC", name: "S&P 500" },
         { symbol: "^IXIC", name: "NASDAQ" },
         { symbol: "^DJI", name: "Dow Jones" },
     ];
 
-    // Get last 7 days
     const today = new Date();
     const sevenDaysAgo = subDays(today, 7);
     const formattedToday = format(today, 'yyyy-MM-dd');
     const formattedPast = format(sevenDaysAgo, 'yyyy-MM-dd');
 
-    // Fetch data for each index
     const indexDataList = indexSymbols.map(index => ({
         ...index,
         query: {

@@ -25,7 +25,7 @@ def strategy_create(request):
 def strategy_list(request):
     account = get_object_or_404(Account, pk=request.user.pk)
     strategy = Strategy.objects.filter(account=account)
-    serializer = StrategyCreateSerializer(strategy, many=True)
+    serializer = StrategySerializer(strategy, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])

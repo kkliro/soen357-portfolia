@@ -3,6 +3,7 @@ from portfolio.models import Portfolio
 from transaction.models import Transaction
 from finance.helpers import get_stock_info, get_stock_price
 from decimal import Decimal
+from collections import defaultdict
 
 class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,53 +32,70 @@ class PortfolioPerformanceSerializer(serializers.Serializer):
 
     @staticmethod
     def calculate_total_gain_loss(transactions):
-        from django.utils.timezone import localtime
-        total_gain_loss = Decimal(0)
-    
-        for transaction in transactions:
-            transaction_date = localtime(transaction.transaction_date).date()
-            market_price = get_stock_price(transaction.symbol)  # Fetch the market price
-    
-            if market_price is not None:
-                market_price = Decimal(market_price)  # Convert to Decimal for consistency
-                if transaction.transaction_type == 'buy':
-                    # Use the market price at the time of the transaction
-                    total_gain_loss -= transaction.quantity * market_price
-                elif transaction.transaction_type == 'sell':
-                    # Use the market price at the time of the transaction
-                    total_gain_loss += transaction.quantity * market_price
-    
-        return total_gain_loss
+        gain_data = PortfolioPerformanceSerializer.calculate_owned_assets_gain_loss(transactions)
+        total_realized = sum(gain_data["realized"].values())
+        total_unrealized = sum(gain_data["unrealized"].values())
+        return {
+            "realized": total_realized,
+            "unrealized": total_unrealized
+        }
 
     @staticmethod
     def calculate_monthly_performance(transactions):
         from collections import defaultdict
         from django.utils.timezone import localtime
-        monthly_performance = defaultdict(lambda: Decimal(0))
-    
-        for transaction in transactions:
-            month = localtime(transaction.transaction_date).strftime('%Y-%m')
-            market_price = get_stock_price(transaction.symbol)  # Fetch the market price
-    
-            if market_price is not None:
-                market_price = Decimal(market_price)  # Convert to Decimal for consistency
-                if transaction.transaction_type == 'buy':
-                    # Subtract the cost based on the market price
-                    monthly_performance[month] -= transaction.quantity * market_price
-                elif transaction.transaction_type == 'sell':
-                    # Add the revenue based on the market price
-                    monthly_performance[month] += transaction.quantity * market_price
-    
-        return dict(monthly_performance)
+        monthly_realized = defaultdict(Decimal)
+
+        owned_assets = defaultdict(list)
+
+        for tx in sorted(transactions, key=lambda t: t.transaction_date):
+            month = localtime(tx.transaction_date).strftime('%Y-%m')
+
+            if tx.transaction_type == 'buy':
+                owned_assets[tx.symbol].append({
+                    'quantity': tx.quantity,
+                    'price': tx.price_per_unit,
+                    'month': month
+                })
+            elif tx.transaction_type == 'sell':
+                quantity_to_sell = tx.quantity
+                sell_price = tx.price_per_unit
+                while quantity_to_sell > 0 and owned_assets[tx.symbol]:
+                    buy_tx = owned_assets[tx.symbol][0]
+                    matched_qty = min(buy_tx['quantity'], quantity_to_sell)
+                    realized_gain = matched_qty * (sell_price - buy_tx['price'])
+                    monthly_realized[month] += realized_gain
+
+                    buy_tx['quantity'] -= matched_qty
+                    quantity_to_sell -= matched_qty
+                    if buy_tx['quantity'] == 0:
+                        owned_assets[tx.symbol].pop(0)
+
+        return {
+            "realized": dict(monthly_realized),
+            "unrealized": {} 
+        }
+
 
     @staticmethod
     def get_investment_types(transactions):
         investment_types = {}
+        owned_assets = defaultdict(Decimal) 
+
         for transaction in transactions:
-            stock_info = get_stock_info(transaction.symbol)
-            investment_type = stock_info.get('type', 'Unknown')
-            investment_types[investment_type] = investment_types.get(investment_type, 0) + 1
+            if transaction.transaction_type == 'buy':
+                owned_assets[transaction.symbol] += transaction.quantity
+            elif transaction.transaction_type == 'sell':
+                owned_assets[transaction.symbol] -= transaction.quantity
+
+        for symbol, quantity in owned_assets.items():
+            if quantity > 0:
+                stock_info = get_stock_info(symbol)
+                investment_type = stock_info.get('type', 'Unknown')
+                investment_types[investment_type] = investment_types.get(investment_type, 0) + 1
+
         return investment_types
+
 
     @staticmethod
     def get_latest_transactions(transactions):
@@ -109,28 +127,45 @@ class PortfolioPerformanceSerializer(serializers.Serializer):
     @staticmethod
     def calculate_owned_assets_gain_loss(transactions):
         from collections import defaultdict
-        owned_assets = defaultdict(lambda: {"quantity": Decimal(0), "total_cost": Decimal(0)})
-        gain_loss = {}
+        owned_assets = defaultdict(list)
+        realized = defaultdict(Decimal)
+        unrealized = defaultdict(Decimal)
 
-        # Aggregate owned assets
-        for transaction in transactions:
-            if transaction.transaction_type == 'buy':
-                owned_assets[transaction.symbol]["quantity"] += transaction.quantity
-                owned_assets[transaction.symbol]["total_cost"] += transaction.total_cost
-            elif transaction.transaction_type == 'sell':
-                owned_assets[transaction.symbol]["quantity"] -= transaction.quantity
-                owned_assets[transaction.symbol]["total_cost"] -= transaction.total_cost
+        for tx in sorted(transactions, key=lambda t: t.transaction_date):
+            if tx.transaction_type == 'buy':
+                owned_assets[tx.symbol].append({
+                    'quantity': tx.quantity,
+                    'price': tx.price_per_unit,
+                    'type': 'buy'
+                })
+            elif tx.transaction_type == 'sell':
+                quantity_to_sell = tx.quantity
+                sell_price = tx.price_per_unit
+                while quantity_to_sell > 0 and owned_assets[tx.symbol]:
+                    buy_tx = owned_assets[tx.symbol][0]
+                    matched_qty = min(buy_tx['quantity'], quantity_to_sell)
+                    realized_gain = matched_qty * (sell_price - buy_tx['price'])
+                    realized[tx.symbol] += realized_gain
 
-        # Calculate gain/loss for owned assets
-        for symbol, data in owned_assets.items():
-            if data["quantity"] > 0:  # Only consider assets still owned
-                current_price = get_stock_price(symbol)
-                if current_price is not None:
-                    current_price = Decimal(current_price)  # Convert float to Decimal
-                    market_value = data["quantity"] * current_price
-                    gain_loss[symbol] = market_value - data["total_cost"]
+                    buy_tx['quantity'] -= matched_qty
+                    quantity_to_sell -= matched_qty
+                    if buy_tx['quantity'] == 0:
+                        owned_assets[tx.symbol].pop(0)
 
-        return gain_loss
+        for symbol, remaining_buys in owned_assets.items():
+            current_price = get_stock_price(symbol)
+            if current_price is None:
+                continue
+            current_price = Decimal(current_price)
+            for buy in remaining_buys:
+                unrealized_gain = buy['quantity'] * (current_price - buy['price'])
+                unrealized[symbol] += unrealized_gain
+
+        return {
+            "realized": dict(realized),
+            "unrealized": dict(unrealized)
+        }
+
 
     def to_representation(self, instance):
         transactions = instance
@@ -140,5 +175,5 @@ class PortfolioPerformanceSerializer(serializers.Serializer):
             "investment_types": self.get_investment_types(transactions),
             "latest_transactions": self.get_latest_transactions(transactions),
             "assets_by_asset": self.get_assets_by_asset(transactions),
-            "owned_assets_gain_loss": self.calculate_owned_assets_gain_loss(transactions),  # New field
+            "owned_assets_gain_loss": self.calculate_owned_assets_gain_loss(transactions),
         }

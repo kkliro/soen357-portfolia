@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useFinanceInfo, useFinanceData } from '../hooks/finance';
+import { useFinanceData } from '../hooks/finance';
 import { AuthContext } from '../context/AuthContext';
 import {
     LineChart,
@@ -50,8 +50,6 @@ export default function MarketPage() {
     const [endDate, setEndDate] = useState("");
 
     const [query, setQuery] = useState(null);
-
-    const { data: info, loading: infoLoading, error: infoError } = useFinanceInfo(query?.symbol, token);
 
     const { data: stockData, loading: dataLoading, error: dataError } = useFinanceData(query, token);
 
@@ -180,20 +178,6 @@ export default function MarketPage() {
                         </button>
                     </div>
                 </form>
-
-                {infoLoading ? (
-                    <p className="text-purple-300">Loading stock info...</p>
-                ) : infoError ? (
-                    <p className="text-red-500">Error: {infoError.message}</p>
-                ) : info ? (
-                    <div className="mb-6 bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg">
-                        <h3 className="text-xl font-bold text-purple-300">{info.longName || info.shortName}</h3>
-                        <p>Symbol: {info.symbol}</p>
-                        <p>
-                            Market Price: {info.regularMarketPrice} {info.currency}
-                        </p>
-                    </div>
-                ) : null}
 
                 {query && (
                     <>

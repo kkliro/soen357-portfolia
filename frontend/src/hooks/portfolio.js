@@ -40,3 +40,34 @@ export const deletePortfolio = async (portfolioId, token) => {
         throw error;
     }
 }
+
+export const portfolioPerformance = async (token) => {
+    try {
+        const response = await axios.get(
+            `http://127.0.0.1:8000/portfolio/performance`,
+            {
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const createPortfolio = async (data, token) => {
+    try {
+        const response = await axios.post('http://127.0.0.1:8000/portfolio/create/', data, {
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

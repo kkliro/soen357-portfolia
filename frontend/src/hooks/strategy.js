@@ -40,3 +40,17 @@ export const deleteStrategy = async (strategyId, token) => {
         throw error;
     }
 }
+
+export const createStrategy = async (data, token) => {
+    try {
+        const response = await axios.post('http://127.0.0.1:8000/strategy/create/', data, {
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

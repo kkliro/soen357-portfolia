@@ -19,9 +19,10 @@ export default function HeaderComponent() {
   }
 
   const navigation = [
-    { name: 'Home', href: '/home', current: true },
+    { name: 'Home', href: '/home', current: false },
     { name: 'Markets', href: '/markets', current: false },
     { name: 'Portfolio Management', href: '/portfolio', current: false },
+    { name: 'Strategy Management', href: '/strategy', current: false },
   ]
 
   return (

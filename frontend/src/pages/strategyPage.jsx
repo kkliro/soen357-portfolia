@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import HeaderComponent from '../../components/headerComponent.jsx';
-import { AuthContext } from '../../context/AuthContext.jsx';
-import { listStrategies } from '../../hooks/strategy.js';
-import StrategyCard from '../../components/StrategyCard.jsx';
+import HeaderComponent from '../components/headerComponent.jsx';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { listStrategies } from '../hooks/strategy.js';
+import StrategyCard from '../components/StrategyCard.jsx';
 
 export default function StrategyPage() {
     const { token } = useContext(AuthContext);

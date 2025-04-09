@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import HeaderComponent from '../../components/headerComponent.jsx';
-import { AuthContext } from '../../context/AuthContext.jsx';
-import { listPortfolios } from '../../hooks/portfolio.js';
-import PortfolioCard from '../../components/portfolioCard.jsx';
+import HeaderComponent from '../components/headerComponent.jsx';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { listPortfolios } from '../hooks/portfolio.js';
+import PortfolioCard from '../components/portfolioCard.jsx';
 
 export default function PortfolioPage() {
   const { token } = useContext(AuthContext);

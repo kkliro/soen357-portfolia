@@ -13,7 +13,7 @@ import {
     BarChart,
     Bar,
 } from 'recharts';
-import HeaderComponent from '../components/headerComponent.jsx';
+import HeaderComponent from '../components/HeaderComponent.jsx';
 import { subDays, format } from 'date-fns';
 
 export default function MarketPage() {
@@ -86,7 +86,7 @@ export default function MarketPage() {
     return (
         <div className="min-h-screen bg-black text-white flex flex-col">
             <HeaderComponent />
-            <main className="px-6 md:px-20 py-10 flex-1">
+            <main className="pt-20 px-6 md:px-20 py-10 flex-1">
                 <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-6">
                     Market Data
                 </h2>

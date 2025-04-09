@@ -1,4 +1,4 @@
-import HeaderComponent from '../components/headerComponent.jsx';
+import HeaderComponent from '../components/HeaderComponent.jsx';
 import {
   PieChart,
   Pie,
@@ -54,19 +54,17 @@ const holdings = [
   { symbol: 'GOOGL', shares: 20 },
 ];
 
-
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-neutral-900 flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col">
       <HeaderComponent />
-      <main className="px-6 md:px-20 py-10 flex-1">
+      <main className="pt-20 px-6 md:px-20 py-10 flex-1">
         <h2 className="text-3xl font-semibold mb-6 text-white">
           Portfolio Summary
         </h2>
 
-        <div className="bg-indigo-900/20 shadow-lg rounded-xl p-6 flex flex-col items-center">
-
-          {/* Portfolio Value */}
+        {/* Portfolio Value Card */}
+        <div className="bg-gray-900 bg-opacity-70 shadow-lg rounded-2xl p-8 flex flex-col items-center border border-purple-800">
           <h3 className="text-sm text-white mb-1">Total Portfolio Value</h3>
           <div className="text-4xl font-bold text-white">$30,928.38</div>
           <div className="flex items-center text-teal-400 mt-2 text-sm mb-4">
@@ -87,10 +85,10 @@ export default function HomePage() {
                 <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="date" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
+            <XAxis dataKey="date" stroke="#ffffff" />
+            <YAxis stroke="#ffffff" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
+            <Tooltip contentStyle={{ backgroundColor: '#1F2937', borderColor: '#4B5563' }}/>
             <Area
               type="monotone"
               dataKey="value"
@@ -102,9 +100,8 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-
-          {/* Pie Chart */}
-          <div className="bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white">
+          {/* Pie Chart Card */}
+          <div className="bg-gray-900 bg-opacity-70 shadow-lg rounded-2xl p-8 text-white border border-purple-800">
             <h3 className="text-lg font-semibold mb-4 text-center">Asset Allocation</h3>
             <div className="flex justify-center items-center">
               <PieChart width={300} height={300}>
@@ -122,8 +119,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Treemap */}
-          <div className="bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white">
+          {/* Treemap Card */}
+          <div className="bg-gray-900 bg-opacity-70 shadow-lg rounded-2xl p-8 text-white border border-purple-800">
             <h3 className="text-lg font-semibold mb-4 text-center">Holding Summary</h3>
             <div className="flex justify-center items-center">
               <Treemap
@@ -137,9 +134,9 @@ export default function HomePage() {
               />
             </div>
           </div>
-          
-          {/* Holdings */}
-          <div className="bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white">
+
+          {/* Holdings Card */}
+          <div className="bg-gray-900 bg-opacity-70 shadow-lg rounded-2xl p-8 text-white border border-purple-800">
             <h3 className="text-lg font-semibold mb-4">Current Holdings</h3>
             <ul className="space-y-2">
               {holdings.map((stock, index) => (
@@ -151,8 +148,8 @@ export default function HomePage() {
             </ul>
           </div>
 
-          {/* Recent Activity */}
-          <div className="bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white">
+          {/* Recent Activity Card */}
+          <div className="bg-gray-900 bg-opacity-70 shadow-lg rounded-2xl p-8 text-white border border-purple-800">
             <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
             <ul className="space-y-3 text-sm">
               {recentActivity.map((activity) => {
@@ -161,7 +158,6 @@ export default function HomePage() {
                   Sell: 'bg-red-500/20 text-red-400',
                   Dividend: 'bg-yellow-500/20 text-yellow-400',
                 };
-
                 const tagClass = tagColors[activity.type] || 'bg-gray-500/20 text-gray-300';
 
                 return (
@@ -173,7 +169,6 @@ export default function HomePage() {
               })}
             </ul>
           </div>
-
         </div>
       </main>
     </div>

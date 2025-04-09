@@ -26,13 +26,14 @@ export default function HeaderComponent() {
   ]
 
   return (
-    <nav className="bg-neutral-800 w-full">
+    <nav className="fixed top-0 w-full bg-black bg-opacity-70 backdrop-blur-lg z-50 border-b border-purple-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center">
-            <img alt="Portfolia Logo" src={logo} className="h-14 w-auto" />
-            <span className="text-white text-2xl font-semibold ml-4">Portfolia</span>
+          
+          {/* Logo + Title */}
+          <div className="flex items-center gap-2">
+            <img alt="Portfolia Logo" src={logo} className="h-10 w-10" />
+            <span className="text-2xl font-bold text-purple-400">Portfolia</span>
           </div>
 
           {/* Navigation */}
@@ -41,19 +42,18 @@ export default function HeaderComponent() {
               <a
                 key={item.name}
                 href={item.href}
-                aria-current={item.current ? 'page' : undefined}
                 className={`${
                   item.current
-                    ? 'bg-indigo-900 text-white'
-                    : 'text-white hover:bg-indigo-500 hover:text-white'
-                } rounded-md px-4 py-3 text-sm font-medium`}
+                    ? 'bg-indigo-800 text-white'
+                    : 'text-white hover:bg-indigo-600 hover:text-white'
+                } rounded-md px-4 py-2 text-sm font-medium transition-colors duration-200`}
               >
                 {item.name}
               </a>
             ))}
             <button
               onClick={handleLogout}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-4 py-3 text-sm font-medium"
+              className=" hover:bg-indigo-600 text-white rounded-md px-4 py-2 text-sm font-medium transition-colors duration-200"
             >
               Logout
             </button>

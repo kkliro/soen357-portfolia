@@ -6,8 +6,9 @@ from rest_framework.authentication import TokenAuthentication
 from django.shortcuts import get_object_or_404
 from account.models import Account
 from strategy.models import Strategy
-from .serializers import PortfolioSerializer, PortfolioCreateSerializer, PortfolioUpdateSerializer
+from .serializers import PortfolioSerializer, PortfolioCreateSerializer, PortfolioUpdateSerializer, PortfolioPerformanceSerializer
 from portfolio.models import Portfolio
+from transaction.models import Transaction
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -56,3 +57,15 @@ def portfolio_delete(request, pk):
     portfolio = get_object_or_404(Portfolio, pk=pk)
     portfolio.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def portfolio_performance(request):
+    account = get_object_or_404(Account, pk=request.user.pk)
+    portfolios = Portfolio.objects.filter(account=account)
+    transactions = Transaction.objects.filter(portfolio__in=portfolios)
+
+    # Pass the queryset as a single instance to the serializer
+    serializer = PortfolioPerformanceSerializer(transactions)
+    return Response(serializer.data, status=status.HTTP_200_OK)

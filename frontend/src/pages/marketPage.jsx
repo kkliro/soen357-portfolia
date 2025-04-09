@@ -85,12 +85,12 @@ export default function MarketPage() {
         <div className="min-h-screen bg-black text-white flex flex-col">
             <HeaderComponent />
             <main className="pt-20 px-6 md:px-20 py-10 flex-1">
-                <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-6">
+                <h2 className="text-4xl font-bold text-purple-200 bg-clip-text bg-gradient-to-r mb-6">
                     Market Data
                 </h2>
 
                 <section className="mb-10">
-                    <h3 className="text-2xl font-semibold text-purple-400 mb-4">Popular Indexes</h3>
+                    <h3 className="text-2xl font-semibold text-white mb-4">Popular Indexes</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {indexHooks.map(({ symbol, name, dataHook }) => {
                             const { data, loading, error } = dataHook;
@@ -110,9 +110,9 @@ export default function MarketPage() {
 
                             return (
                                 <div key={symbol} className="bg-gray-900 p-4 rounded-xl shadow-lg">
-                                    <h4 className="text-lg font-bold text-purple-300 mb-2">{name}</h4>
+                                    <h4 className="text-lg font-bold text-white mb-2">{name}</h4>
                                     {loading ? (
-                                        <p className="text-sm text-purple-300">Loading...</p>
+                                        <p className="text-sm text-white">Loading...</p>
                                     ) : error ? (
                                         <p className="text-sm text-red-500">Error</p>
                                     ) : (
@@ -143,7 +143,7 @@ export default function MarketPage() {
                 <form onSubmit={handleSubmit} className="mb-6 bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg">
                     <div className="flex flex-col md:flex-row items-center gap-4">
                         <div className="flex-1">
-                            <label className="text-purple-300 text-sm">Stock Symbol</label>
+                            <label className="text-white text-sm">Stock Symbol</label>
                             <input
                                 type="text"
                                 value={symbol}
@@ -153,7 +153,7 @@ export default function MarketPage() {
                             />
                         </div>
                         <div className="flex-1">
-                            <label className="text-purple-300 text-sm">Start Date</label>
+                            <label className="text-white text-sm">Start Date</label>
                             <input
                                 type="date"
                                 value={startDate}
@@ -162,7 +162,7 @@ export default function MarketPage() {
                             />
                         </div>
                         <div className="flex-1">
-                            <label className="text-purple-300 text-sm">End Date</label>
+                            <label className="text-white text-sm">End Date</label>
                             <input
                                 type="date"
                                 value={endDate}
@@ -182,21 +182,21 @@ export default function MarketPage() {
                 {query && (
                     <>
                         {dataLoading ? (
-                            <p className="text-purple-300">Loading stock data...</p>
+                            <p className="text-white">Loading stock data...</p>
                         ) : dataError ? (
                             <p className="text-red-500">Error: {dataError.message}</p>
                         ) : marketDetails ? (
                             <>
                                 <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div className="bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg">
-                                        <h3 className="text-lg font-bold text-purple-300 mb-2">{marketDetails.asset_name}</h3>
+                                        <h3 className="text-lg font-bold text-white mb-2">{marketDetails.asset_name}</h3>
                                         <p><span className="font-medium">Symbol:</span> {marketDetails.symbol}</p>
                                         <p><span className="font-medium">Type:</span> {marketDetails.type}</p>
                                         <p><span className="font-medium">Sector:</span> {marketDetails.sector}</p>
                                         <p><span className="font-medium">Industry:</span> {marketDetails.industry}</p>
                                     </div>
                                     <div className="bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg">
-                                        <h3 className="text-lg font-bold text-purple-300 mb-2">Pricing</h3>
+                                        <h3 className="text-lg font-bold text-white mb-2">Pricing</h3>
                                         <p>
                                             <span className="font-medium">Current Price:</span> ${marketDetails.current_price}
                                         </p>
@@ -211,7 +211,7 @@ export default function MarketPage() {
                                         </p>
                                     </div>
                                     <div className="bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg">
-                                        <h3 className="text-lg font-bold text-purple-300 mb-2">Dividends & Stats</h3>
+                                        <h3 className="text-lg font-bold text-white mb-2">Dividends & Stats</h3>
                                         <p>
                                             <span className="font-medium">Dividend Yield:</span> {marketDetails.dividend_yield}%
                                         </p>
@@ -264,13 +264,13 @@ export default function MarketPage() {
                                 </div>
                             </>
                         ) : (
-                            <p className="text-purple-300">No stock data available.</p>
+                            <p className="text-white">No stock data available.</p>
                         )}
                     </>
                 )}
 
                 {!query && (
-                    <p className="text-purple-300">
+                    <p className="text-white">
                         Please enter a stock symbol with start and end dates to view data.
                     </p>
                 )}

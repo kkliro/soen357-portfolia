@@ -11,6 +11,8 @@ def get_stock_price(symbol):
         return None
     return history['Close'].iloc[-1]
 
+import yfinance as yf
+
 def get_stock_info(symbol):
     """
     Returns a dictionary containing select stock information:
@@ -18,6 +20,7 @@ def get_stock_info(symbol):
     - longName
     - currency
     - regularMarketPrice
+    - quoteType (type of investment: e.g., EQUITY, ETF, MUTUALFUND)
     """
     ticker = yf.Ticker(symbol)
     info = ticker.info
@@ -26,8 +29,10 @@ def get_stock_info(symbol):
         "shortName": info.get("shortName"),
         "longName": info.get("longName"),
         "currency": info.get("currency"),
-        "regularMarketPrice": info.get("regularMarketPrice")
+        "regularMarketPrice": info.get("regularMarketPrice"),
+        "type": info.get("quoteType") 
     }
+
 
 def get_stock_history(symbol, start_date, end_date):
     """

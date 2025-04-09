@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useFinanceData } from '../hooks/finance';
+import { useFinanceInfo, useFinanceData } from '../hooks/finance';
 import { AuthContext } from '../context/AuthContext';
 import {
     LineChart,
@@ -14,9 +14,39 @@ import {
     Bar,
 } from 'recharts';
 import HeaderComponent from '../components/headerComponent.jsx';
+import { subDays, format } from 'date-fns';
 
 export default function MarketPage() {
     const { token } = useContext(AuthContext);
+
+    // Top indexes
+    const indexSymbols = [
+        { symbol: "^GSPC", name: "S&P 500" },
+        { symbol: "^IXIC", name: "NASDAQ" },
+        { symbol: "^DJI", name: "Dow Jones" },
+    ];
+
+    // Get last 7 days
+    const today = new Date();
+    const sevenDaysAgo = subDays(today, 7);
+    const formattedToday = format(today, 'yyyy-MM-dd');
+    const formattedPast = format(sevenDaysAgo, 'yyyy-MM-dd');
+
+    // Fetch data for each index
+    const indexDataList = indexSymbols.map(index => ({
+        ...index,
+        query: {
+            symbol: index.symbol,
+            start_date: formattedPast,
+            end_date: formattedToday,
+        },
+    }));
+
+    const indexHooks = indexDataList.map(index => ({
+        ...index,
+        dataHook: useFinanceData(index.query, token),
+    }));
+
 
     const [symbol, setSymbol] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -63,6 +93,57 @@ export default function MarketPage() {
                 <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-6">
                     Market Data
                 </h2>
+
+                <section className="mb-10">
+                    <h3 className="text-2xl font-semibold text-purple-400 mb-4">Popular Indexes</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {indexHooks.map(({ symbol, name, dataHook }) => {
+                            const { data, loading, error } = dataHook;
+                            let chartData = [];
+
+                            if (Array.isArray(data)) {
+                                chartData = data.map(item => ({
+                                    ...item,
+                                    Date: new Date(item.Date).toLocaleDateString(),
+                                }));
+                            } else if (data && Array.isArray(data.historical_data)) {
+                                chartData = data.historical_data.map(item => ({
+                                    ...item,
+                                    Date: new Date(item.Date).toLocaleDateString(),
+                                }));
+                            }
+
+                            return (
+                                <div key={symbol} className="bg-gray-900 p-4 rounded-xl shadow-lg">
+                                    <h4 className="text-lg font-bold text-purple-300 mb-2">{name}</h4>
+                                    {loading ? (
+                                        <p className="text-sm text-purple-300">Loading...</p>
+                                    ) : error ? (
+                                        <p className="text-sm text-red-500">Error</p>
+                                    ) : (
+                                        <ResponsiveContainer width="100%" height={150}>
+                                            <LineChart data={chartData}>
+                                                <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
+                                                <XAxis dataKey="Date" stroke="#FFFFFF" tick={{ fontSize: 10 }} />
+                                                <YAxis stroke="#FFFFFF" tick={{ fontSize: 10 }} domain={['auto', 'auto']} />
+                                                <Tooltip contentStyle={{ backgroundColor: "#1F2937", color: "#fff" }} />
+                                                <Line
+                                                    type="monotone"
+                                                    dataKey="Close"
+                                                    stroke="#8B5CF6"
+                                                    strokeWidth={2}
+                                                    dot={false}
+                                                />
+                                            </LineChart>
+                                        </ResponsiveContainer>
+
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+
 
                 <form onSubmit={handleSubmit} className="mb-6 bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg">
                     <div className="flex flex-col md:flex-row items-center gap-4">

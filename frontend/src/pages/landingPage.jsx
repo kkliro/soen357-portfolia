@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import CreateAccountPopup from '../components/CreateAccountPopup';
+import LoginPopup from '../components/LoginPopup';
+import logo from '../assets/logo.png';
 
 const LandingPage = () => {
   const [chartData, setChartData] = useState([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   useEffect(() => {
     const generateData = () => {
@@ -71,13 +76,23 @@ const LandingPage = () => {
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10" />
-
       <div className="relative z-20 w-full">
         <nav className="fixed top-0 w-full bg-black bg-opacity-70 backdrop-blur-lg z-50 px-6 py-4 flex justify-between items-center border-b border-purple-900">
-          <div className="text-2xl font-bold text-purple-400">Portfolia</div>
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="Portfolia Logo" className="h-8 w-8" />
+          <span className="text-2xl font-bold text-purple-400">Portfolia</span>
+        </div>
           <div className="flex gap-4">
-            <button className="px-4 py-2 text-purple-400 hover:text-white transition">Log In</button>
-            <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition">Sign Up</button>
+            <button 
+              onClick={() => setIsLoginOpen(true)}
+              className="px-4 py-2 text-purple-400 border border-purple-500 rounded-lg hover:text-white transition">
+              Log In
+            </button>
+            <button 
+              onClick={() => setIsSignupOpen(true)}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition"> 
+              Sign Up
+            </button>
           </div>
         </nav>
 
@@ -91,15 +106,17 @@ const LandingPage = () => {
                 Smart investment tracking and portfolio management powered by cutting-edge AI analytics.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 rounded-lg font-bold transition transform hover:scale-105">
-                  Get Started Free
+                <button 
+                  onClick={() => setIsSignupOpen(true)}
+                  className="px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 rounded-lg font-bold transition transform hover:scale-105">
+                  Get Started For Free
                 </button>
                 <button className="px-8 py-4 bg-black bg-opacity-50 border border-purple-500 text-purple-400 hover:text-white hover:border-purple-400 rounded-lg font-bold transition transform hover:scale-105">
                   See Demo
                 </button>
               </div>
             </div>
-            
+
             <div className={`relative transition-all duration-1000 ${isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
               <div className="absolute -inset-2 bg-purple-900 opacity-20 blur-xl rounded-3xl animate-pulse"/>
               <div className="relative bg-gray-900 bg-opacity-70 p-6 rounded-2xl border border-purple-800">
@@ -123,100 +140,16 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="w-full px-6 py-24 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-900 to-black opacity-20" />
-          <div className="max-w-7xl mx-auto relative">
-            <h2 className="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-16">
-              Powerful Features for Smart Investing
-            </h2>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
-                <div 
-                  key={index} 
-                  className={`p-6 rounded-xl backdrop-blur-sm bg-gray-900 bg-opacity-40 border border-purple-900 hover:border-purple-500 transition-all transform hover:scale-105 ${
-                    isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                  }`}
-                  style={{ transitionDelay: `${index * 100}ms`, transitionDuration: '700ms' }}
-                >
-                  <div className="w-12 h-12 rounded-full bg-purple-600 bg-opacity-30 flex items-center justify-center mb-4">
-                    <div className="w-6 h-6 rounded-full bg-purple-500" />
-                  </div>
-                  <h3 className="text-xl font-bold text-purple-300 mb-3">{feature.title}</h3>
-                  <p className="text-gray-300">{feature.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="w-full px-6 py-24 relative">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-16">
-              AI-Powered Analytics
-            </h2>
-            
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className={`transition-all duration-1000 ${isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-purple-700 opacity-20 blur-xl rounded-3xl" />
-                  <div className="relative p-6 rounded-xl bg-gray-900 bg-opacity-70 border border-purple-800">
-                    <h3 className="text-xl font-bold text-purple-300 mb-4">Performance Tracking</h3>
-                    <ResponsiveContainer width="100%" height={250}>
-                      <LineChart data={chartData}>
-                        <XAxis dataKey="month" tick={{ fill: '#9CA3AF' }} />
-                        <YAxis tick={{ fill: '#9CA3AF' }} />
-                        <Tooltip contentStyle={{ backgroundColor: '#1F2937', borderColor: '#4B5563' }} />
-                        <Line type="monotone" dataKey="value" stroke="#8B5CF6" strokeWidth={2} dot={false} activeDot={{ r: 6 }}/>
-                        <Line type="monotone" dataKey="growth" stroke="#EC4899" strokeWidth={2} dot={false} activeDot={{ r: 6 }}/>
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
-              
-              <div className={`transition-all duration-1000 ${isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '200ms' }}>
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-purple-700 opacity-20 blur-xl rounded-3xl" />
-                  <div className="relative p-6 rounded-xl bg-gray-900 bg-opacity-70 border border-purple-800">
-                    <h3 className="text-xl font-bold text-purple-300 mb-4">Asset Diversification</h3>
-                    <ResponsiveContainer width="100%" height={250}>
-                      <BarChart data={chartData}>
-                        <XAxis dataKey="month" tick={{ fill: '#9CA3AF' }} />
-                        <YAxis tick={{ fill: '#9CA3AF' }} />
-                        <Tooltip contentStyle={{ backgroundColor: '#1F2937', borderColor: '#4B5563' }} />
-                        <Bar dataKey="diversification" fill="#8B5CF6" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-full px-6 py-24 relative">
-          <div className="absolute inset-0 bg-gradient-to-t from-purple-900 to-black opacity-30" />
-          <div className="relative max-w-4xl mx-auto text-center">
-            <div className="absolute -inset-8 bg-purple-600 opacity-10 blur-3xl rounded-full animate-pulse" style={{animationDuration: '6s'}}/>
-            <div className="relative bg-black bg-opacity-40 backdrop-blur-lg p-12 rounded-2xl border border-purple-800">
-              <h2 className="text-4xl font-bold text-white mb-6">
-                Ready to optimize your investments?
-              </h2>
-              <p className="text-lg text-purple-200 mb-8 max-w-lg mx-auto">
-                Join thousands of investors who are making smarter decisions with Portfolia's AI-powered insights.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="px-10 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-bold text-lg transition transform hover:scale-105">
-                  Get Started Now
-                </button>
-                <button className="px-10 py-4 bg-black bg-opacity-40 hover:bg-opacity-60 text-white border border-purple-400 rounded-lg font-bold text-lg transition transform hover:scale-105">
-                  Schedule Demo
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {isSignupOpen && (
+          <CreateAccountPopup 
+            closeModal={() => setIsSignupOpen(false)}
+          />
+        )}
+        {isLoginOpen && (
+          <LoginPopup 
+            closeModal={() => setIsLoginOpen(false)}
+          />
+        )}
 
         <footer className="w-full px-6 py-8 bg-black bg-opacity-80 backdrop-blur-md border-t border-purple-900">
           <div className="max-w-7xl mx-auto">

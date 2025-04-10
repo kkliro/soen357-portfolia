@@ -77,3 +77,15 @@ def fetch_stock_data(ticker_symbol, start=None, end=None):
 
     except Exception as e:
         return {"error": str(e)}
+
+def get_stock_news(symbol):
+    """
+    Returns a list of news articles for the given stock symbol using yfinance.
+    Each news article is represented as a dictionary.
+    If no news is available, returns an empty list.
+    """
+    ticker = yf.Ticker(symbol)
+    news = ticker.news
+    if not news:
+        return []
+    return news

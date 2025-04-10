@@ -71,3 +71,19 @@ export const createPortfolio = async (data, token) => {
         throw error;
     }
 };
+
+export const recommendPortfolio = async (portfolioId, token) => {
+    try {
+        console.log
+        const response = await axios.get(`http://127.0.0.1:8000/portfolio/${portfolioId}/recommend`, {
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log(response);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

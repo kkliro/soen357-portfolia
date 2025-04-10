@@ -3,6 +3,7 @@ import { updatePortfolio, deletePortfolio } from '../hooks/portfolio.js';
 import { AuthContext } from '../context/AuthContext';
 import Notification from './Notification';
 import { FaFolder } from 'react-icons/fa';
+import RecommendationsPanel from './RecommendationsPanel';
 
 const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'CAD', 'GBP'];
 
@@ -67,12 +68,11 @@ export default function PortfolioCard({
 
   return (
     <div
-      className={`bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white ring-2 ring-indigo-500 flex flex-col transition-all duration-500 ${
+      className={`bg-purple-600/10 shadow-lg rounded-xl p-6 text-white ring-2 ring-purple-600 flex flex-col transition-all duration-500 ${
         isExpanded ? 'col-span-2 w-full h-[80vh]' : ''
       }`}
     >
-      {/* Header with icon and title */}
-      <div className="border-b border-indigo-700 pb-2 mb-4 flex items-center justify-between">
+      <div className="border-b border-purple-600 pb-2 mb-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <FaFolder className="text-4xl" />
           {isEditing ? (
@@ -89,8 +89,8 @@ export default function PortfolioCard({
           )}
         </div>
         <div className="flex space-x-2">
-          {!isEditing && ( // Hide Recommendations button when editing
-            isExpanded ? (
+          {!isEditing &&
+            (isExpanded ? (
               <button
                 onClick={onContract}
                 className="bg-red-500 hover:bg-red-600 text-white rounded-md px-3 py-1 text-sm"
@@ -104,19 +104,18 @@ export default function PortfolioCard({
               >
                 Recommendations
               </button>
-            )
-          )}
+            ))}
           {!isExpanded && !isEditing && (
             <>
               <button
                 onClick={() => setIsEditing(true)}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+                className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm"
               >
                 Edit
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+                className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm"
               >
                 Delete
               </button>
@@ -126,13 +125,13 @@ export default function PortfolioCard({
             <>
               <button
                 onClick={handleCancel}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+                className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm"
+                className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm"
               >
                 Save
               </button>
@@ -140,12 +139,10 @@ export default function PortfolioCard({
           )}
         </div>
       </div>
-  
+
       {/* Body content */}
       {isExpanded ? (
-        <div className="flex-grow flex flex-col items-center justify-center">
-          <h2 className="text-3xl font-bold mb-4">Recommendations View</h2>
-        </div>
+        <RecommendationsPanel portfolioId={portfolio.id} />
       ) : isEditing ? (
         <div className="space-y-4">
           <div>
@@ -198,17 +195,25 @@ export default function PortfolioCard({
                 <span className="font-medium mr-2">Strategy:</span>
                 <span>{portfolio.strategy}</span>
               </p>
-            </div>
-            <div className="flex flex-col space-y-2">
               <p className="flex items-center">
                 <span className="font-medium mr-2">Currency:</span>
                 <span>{portfolio.currency}</span>
               </p>
             </div>
+            <div className="flex flex-col space-y-2 text-sm text-gray-400">
+              <p>
+                <span className="font-medium mr-2">Created:</span>
+                <span>{new Date(portfolio.created_at).toLocaleString()}</span>
+              </p>
+              <p>
+                <span className="font-medium mr-2">Updated:</span>
+                <span>{new Date(portfolio.updated_at).toLocaleString()}</span>
+              </p>
+            </div>
           </div>
         </>
       )}
-  
+
       {notification.message && (
         <Notification
           message={notification.message}

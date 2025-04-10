@@ -6,11 +6,15 @@ from decimal import Decimal
 from collections import defaultdict
 
 class PortfolioSerializer(serializers.ModelSerializer):
+    strategy_name = serializers.CharField(source="strategy.name", read_only=True)
+
     class Meta:
         model = Portfolio
-        fields = '__all__'
+        fields = '__all__' 
 
 class PortfolioCreateSerializer(serializers.ModelSerializer):
+    strategy_name = serializers.CharField(source="strategy.name", read_only=True)
+    
     class Meta:
         model = Portfolio
         fields = '__all__'

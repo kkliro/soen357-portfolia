@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { updatePortfolio, deletePortfolio } from '../hooks/portfolio.js';
 import { AuthContext } from '../context/AuthContext';
 import Notification from './Notification';
-import { FaFolder } from 'react-icons/fa';
+import { FaFolder, FaChartLine, FaDollarSign } from 'react-icons/fa';
 import RecommendationsPanel from './RecommendationsPanel';
 
 const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'CAD', 'GBP'];
@@ -156,7 +156,7 @@ export default function PortfolioCard({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Strategy:</label>
+            <label className="block text-sm font-medium mb-1">Strategy (ID):</label>
             <input
               name="strategy"
               type="text"
@@ -188,16 +188,22 @@ export default function PortfolioCard({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col space-y-2">
               <p className="flex items-center">
-                <span className="font-medium mr-2">Description:</span>
-                <span>{portfolio.description}</span>
-              </p>
-              <p className="flex items-center">
                 <span className="font-medium mr-2">Strategy:</span>
-                <span>{portfolio.strategy}</span>
+                <div className="flex items-center bg-gray-200 text-purple-700 rounded-full px-2 py-1">
+                  <FaChartLine className="mr-1" />
+                  <span>{portfolio.strategy_name}</span>
+                </div>
               </p>
               <p className="flex items-center">
                 <span className="font-medium mr-2">Currency:</span>
-                <span>{portfolio.currency}</span>
+                <div className="flex items-center bg-gray-200 text-purple-700 rounded-full px-2 py-1">
+                  <FaDollarSign className="mr-1" />
+                  <span>{portfolio.currency}</span>
+                </div>
+              </p>
+              <p className="flex items-center">
+                <span className="font-medium mr-2">Description:</span>
+                <span>{portfolio.description}</span>
               </p>
             </div>
             <div className="flex flex-col space-y-2 text-sm text-gray-400">
@@ -208,6 +214,10 @@ export default function PortfolioCard({
               <p>
                 <span className="font-medium mr-2">Updated:</span>
                 <span>{new Date(portfolio.updated_at).toLocaleString()}</span>
+              </p>
+              <p>
+                <span className="font-medium mr-2">ID:</span>
+                <span>{portfolio.id}</span>
               </p>
             </div>
           </div>

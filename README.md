@@ -5,4 +5,5 @@
 setup.bat
 ~\backend>env\Scripts\activate
 python manage.py createsuperuser
+python manage.py runserver
 ```

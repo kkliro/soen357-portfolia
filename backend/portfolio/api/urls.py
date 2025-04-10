@@ -4,7 +4,8 @@ from .views import (portfolio_create,
                     porfolio_get, 
                     portfolio_update, 
                     portfolio_delete,
-                    portfolio_performance)
+                    portfolio_performance,
+                    portfolio_recommend)
 
 urlpatterns = [
     path('create/', portfolio_create, name='portfolios-create'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('<int:pk>/update', portfolio_update, name='portfolios-update'),
     path('<int:pk>/delete', portfolio_delete, name='portfolios-delete'),
     path('performance/', portfolio_performance, name='portfolios-performance'),
+    path('<int:pk>/recommend', portfolio_recommend, name='portfolios-recommend'),
 ]

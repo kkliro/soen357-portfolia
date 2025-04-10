@@ -9,6 +9,7 @@ from strategy.models import Strategy
 from .serializers import PortfolioSerializer, PortfolioCreateSerializer, PortfolioUpdateSerializer, PortfolioPerformanceSerializer
 from portfolio.models import Portfolio
 from transaction.models import Transaction
+from portfolio.recommendations import generate_recommendation
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -69,3 +70,19 @@ def portfolio_performance(request):
     # Pass the queryset as a single instance to the serializer
     serializer = PortfolioPerformanceSerializer(transactions)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def portfolio_recommend(request, pk):
+    """
+    Endpoint to generate recommendations for a portfolio based on its performance and strategy.
+    URL: /portfolio/<id>/recommend
+    """
+    portfolio = get_object_or_404(Portfolio, pk=pk)
+    
+    if portfolio.account.pk != request.user.pk:
+        return Response({"detail": "Not authorized."}, status=status.HTTP_403_FORBIDDEN)
+    
+    recommendation_data = generate_recommendation(portfolio)
+    return Response(recommendation_data, status=status.HTTP_200_OK)

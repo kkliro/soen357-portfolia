@@ -102,9 +102,9 @@ export default function StrategyCard({ strategy, onStrategyUpdated }) {
             : 'ring-green-500';
 
     return (
-        <div className={`bg-indigo-900/20 shadow-lg rounded-xl p-6 text-white ring-2 ${borderClass} flex flex-col`}>
+        <div className={`bg-purple-600/10 shadow-lg rounded-xl p-6 text-white ring-2 ${borderClass} flex flex-col transition-all duration-500`}>
             {/* Header Section */}
-            <div className="border-b border-indigo-700 pb-2 mb-4 flex items-center justify-between">
+            <div className="border-b border-purple-600 pb-2 mb-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                     <FaChartLine className="text-4xl" />
                     {isEditing ? (
@@ -128,13 +128,13 @@ export default function StrategyCard({ strategy, onStrategyUpdated }) {
                 <div className="flex space-x-2">
                     {isEditing ? (
                         <>
-                            <button onClick={handleCancel} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm">Cancel</button>
-                            <button onClick={handleSave} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm">Save</button>
+                            <button onClick={handleCancel} className="bg-red-600 hover:bg-red-700 text-white rounded-md px-3 py-1 text-sm">Cancel</button>
+                            <button onClick={handleSave} className="bg-green-600 hover:bg-green-700 text-white rounded-md px-3 py-1 text-sm">Save</button>
                         </>
                     ) : (
                         <>
-                            <button onClick={() => setIsEditing(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm">Edit</button>
-                            <button onClick={handleDelete} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1 text-sm">Delete</button>
+                            <button onClick={() => setIsEditing(true)} className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm">Edit</button>
+                            <button onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white rounded-md px-3 py-1 text-sm">Delete</button>
                         </>
                     )}
                 </div>

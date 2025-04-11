@@ -15,6 +15,7 @@ import {
 } from 'recharts';
 import HeaderComponent from '../components/HeaderComponent.jsx';
 import { subDays, format } from 'date-fns';
+import ChatbotComponent from '../components/chatbotComponent.jsx';
 
 export default function MarketPage() {
     const { token } = useContext(AuthContext);
@@ -275,6 +276,7 @@ export default function MarketPage() {
                     </p>
                 )}
             </main>
+            <ChatbotComponent />
         </div>
     );
 }

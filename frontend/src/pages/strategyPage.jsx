@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext.jsx';
 import { listStrategies } from '../hooks/strategy.js';
 import StrategyCard from '../components/StrategyCard.jsx';
 import CreateStrategyPopup from '../components/CreateStrategyPopup.jsx';
+import ChatbotComponent from '../components/chatbotComponent.jsx';
 
 export default function StrategyPage() {
     const { token } = useContext(AuthContext);
@@ -32,7 +33,6 @@ export default function StrategyPage() {
 
     return (
         <div className="relative min-h-screen bg-black flex flex-col">
-            {/* Background Glowy Animation */}
             <div className="absolute inset-0 overflow-hidden">
                 {[...Array(40)].map((_, i) => (
                     <div 
@@ -82,6 +82,9 @@ export default function StrategyPage() {
                         onStrategyCreated={handleStrategyCreated}
                     />
                 )}
+            </div>
+            <div className="relative z-30">
+                <ChatbotComponent />
             </div>
         </div>
     );

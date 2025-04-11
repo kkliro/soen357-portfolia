@@ -1,20 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import logo from '../assets/logo.png';
+import { AuthContext } from '../context/AuthContext';
+import { useChatbotPrompt } from '../hooks/chatbot';
 
 export default function ChatbotComponent() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
+  const { token } = useContext(AuthContext);
+  const { data, loading, error, sendPrompt } = useChatbotPrompt(token);
+
   const handleSend = () => {
     if (input.trim() === '') return;
-    setMessages([...messages, { text: input, sender: 'user' }]);
+    setMessages(prev => [...prev, { text: input, sender: 'user' }]);
+    sendPrompt(input);
     setInput('');
-    // Simulate a chatbot reply after 1 second
-    setTimeout(() => {
-      setMessages(prev => [...prev, { text: 'This is a response from the chatbot', sender: 'bot' }]);
-    }, 1000);
   };
+
+  useEffect(() => {
+    if (data) {
+      const botText =
+        typeof data === 'object'
+          ? (data.response ? data.response : JSON.stringify(data))
+          : data;
+      setMessages(prev => [...prev, { text: botText, sender: 'bot' }]);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      setMessages(prev => [
+        ...prev,
+        { text: "Error: " + error.message, sender: 'bot' }
+      ]);
+    }
+  }, [error]);
 
   return (
     <div className="fixed bottom-4 right-4">
@@ -28,9 +49,19 @@ export default function ChatbotComponent() {
           </div>
           <div className="flex-1 p-4 overflow-y-auto space-y-2">
             {messages.map((msg, index) => (
-              <div key={index} className={msg.sender === 'user' ? "text-right" : "text-left"}>
-                <span className={`inline-block p-2 rounded ${msg.sender === 'user' ? "bg-purple-600 text-white" : "bg-gray-700 text-white"}`}>
+              <div
+                key={index}
+                className={msg.sender === 'user' ? "text-right" : "text-left"}
+              >
+                <span
+                  className={`inline-block p-2 rounded ${
+                    msg.sender === 'user'
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-700 text-white"
+                  }`}
+                >
                   {msg.text}
+                  {loading && msg.sender === 'bot' && " ..."}
                 </span>
               </div>
             ))}

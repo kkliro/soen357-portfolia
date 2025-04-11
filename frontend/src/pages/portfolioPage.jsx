@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext.jsx';
 import { listPortfolios } from '../hooks/portfolio.js';
 import PortfolioCard from '../components/PortfolioCard.jsx';
 import CreatePortfolioPopup from '../components/CreatePortfolioPopup.jsx';
+import ChatbotComponent from '../components/chatbotComponent.jsx';
 
 export default function PortfolioPage() {
   const { token } = useContext(AuthContext);
@@ -86,6 +87,9 @@ export default function PortfolioPage() {
             onPortfolioCreated={handlePortfolioCreated}
           />
         )}
+      </div>
+      <div className="relative z-30">
+          <ChatbotComponent />
       </div>
     </div>
   );

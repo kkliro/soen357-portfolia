@@ -65,6 +65,9 @@ def prompt(request):
     if "strategy" in prompt_text and "manage" in prompt_text:
         messages.append("To manage your strategy, please go to Strategy Management.")
 
+    if "what are you" in prompt_text:
+        messages.append("I am a financial assistant designed to help you with stock market insights and portfolio management.")
+ 
     if not messages:
         messages.append("I'm sorry, I don't understand the question.")
         

@@ -67,14 +67,11 @@ export default function HeaderComponent() {
     <nav className="fixed top-0 w-full bg-black bg-opacity-70 backdrop-blur-lg z-50 border-b border-purple-900">
       <div className="mx-auto px-4 sm:px-10 lg:px-14">
         <div className="flex h-16 items-center justify-between">
-          
-          {/* Logo + Title */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/home')}>
             <img alt="Portfolia Logo" src={logo} className="h-12 w-12" />
             <span className="text-3xl font-bold text-purple-400">Portfolia</span>
           </div>
 
-          {/* Navigation */}
           <div className="flex items-center space-x-4 ml-auto">
             {navigation.map((item) => (
               <a

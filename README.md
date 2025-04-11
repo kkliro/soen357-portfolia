@@ -1,6 +1,6 @@
 # Portfolia
 
-## Contributors
+## Team Members
 
 - Konstantin Klironomos - 40242911
 - Matteo Sansone - 40242278

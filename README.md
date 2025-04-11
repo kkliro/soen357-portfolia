@@ -36,7 +36,7 @@ npm run dev
 
 #### Windows
 
-> Note: If you have NEVER setup the backend before, run perform these steps. 
+> Note: If you have NEVER setup the backend before, perform these steps. 
 
 ```sh
 setup_backend.bat
@@ -54,7 +54,7 @@ python manage.py runserver
 ```
 
 #### Unix-based OS
-> Note: If you have NEVER setup the backend before, run perform these steps. 
+> Note: If you have NEVER setup the backend before, perform these steps. 
 
 ```sh
 ./setup_backend.sh

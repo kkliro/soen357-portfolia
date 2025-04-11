@@ -50,7 +50,7 @@ export default function RecommendationsPanel({ portfolioId }) {
     const stocksAnalysis = recommendData?.stocks_analysis || [];
 
     return (
-        <div className="w-full bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg border border-purple-800 max-h-[80vh] overflow-y-auto">
+        <div className="w-full bg-gray-900 bg-opacity-70 p-6 rounded-xl shadow-lg border border-transparent max-h-[80vh] overflow-y-auto">
             <h2 className="text-3xl font-bold mb-4 text-white">Portfolio Progress</h2>
             {progressData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={300}>

@@ -115,7 +115,7 @@ export default function PortfolioCard({
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm"
+                className="bg-red-600 hover:bg-red-700 text-white rounded-md px-3 py-1 text-sm"
               >
                 Delete
               </button>
@@ -125,13 +125,13 @@ export default function PortfolioCard({
             <>
               <button
                 onClick={handleCancel}
-                className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm"
+                className="bg-red-600 hover:bg-red-700 text-white rounded-md px-3 py-1 text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="bg-purple-600 hover:bg-purple-700 text-white rounded-md px-3 py-1 text-sm"
+                className="bg-green-600 hover:bg-green-700 text-white rounded-md px-3 py-1 text-sm"
               >
                 Save
               </button>

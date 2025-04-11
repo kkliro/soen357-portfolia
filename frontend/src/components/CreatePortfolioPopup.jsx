@@ -31,25 +31,19 @@ export default function CreatePortfolioPopup({ closeModal, onPortfolioCreated })
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      {/* Backdrop */}
       <div className="fixed inset-0 bg-black opacity-50" onClick={closeModal}></div>
 
-      {/* Popup container */}
-      <div className="relative bg-gray-900 bg-opacity-90 border border-purple-800 rounded-2xl shadow-2xl w-full max-w-md mx-auto z-10 p-6 backdrop-blur-lg">
-        {/* Close button */}
+      <div className="relative bg-purple-600/10 bg-opacity-90 border border-purple-800 rounded-2xl shadow-2xl w-full max-w-md mx-auto z-10 p-6 backdrop-blur-lg">
         <div className="flex justify-end">
           <button onClick={closeModal} className="text-gray-400 hover:text-purple-400 transition">
             &#x2715;
           </button>
         </div>
 
-        {/* Header */}
         <h2 className="text-center text-2xl font-bold text-white mb-4">Create New Portfolio</h2>
 
-        {/* Error message */}
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="strategy" className="block text-sm font-medium text-purple-400">

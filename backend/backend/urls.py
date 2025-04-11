@@ -9,4 +9,5 @@ urlpatterns = [
     path('portfolio/', include('portfolio.api.urls')),
     path('transaction/', include('transaction.api.urls')),
     path('finance/', include('finance.api.urls')),
+    path('chatbot/', include('chatbot.api.urls')),
 ]

@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'strategy',
     'portfolio',
     'transaction',
-    'finance'
+    'finance',
+    'chatbot'
 ]
 
 MIDDLEWARE = [

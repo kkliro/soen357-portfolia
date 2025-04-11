@@ -118,12 +118,6 @@ export default function StrategyCard({ strategy, onStrategyUpdated }) {
                     ) : (
                         <h3 className="text-2xl font-bold">{strategy.name}</h3>
                     )}
-                    <span className="flex items-center">
-                        {getRiskIcon(strategy.risk_tolerance)}
-                        <span className="ml-1 text-sm">
-                            {strategy.risk_tolerance.toUpperCase()} RISK
-                        </span>
-                    </span>
                 </div>
                 <div className="flex space-x-2">
                     {isEditing ? (
@@ -216,13 +210,18 @@ export default function StrategyCard({ strategy, onStrategyUpdated }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col space-y-2">
                             <p className="flex items-center">
+                                {getRiskIcon(strategy.risk_tolerance)}
+                                <span className="ml-1 font-medium inline-block w-40">Risk Tolerance:</span>
+                                <span>{strategy.risk_tolerance.toUpperCase()}</span>
+                            </p>
+                            <p className="flex items-center">
                                 <FaDollarSign className="mr-2" />
-                                <span className="font-medium inline-block w-40">Target Return:</span> 
+                                <span className="font-medium inline-block w-40">Target Return:</span>
                                 <span>{strategy.target_return}%</span>
                             </p>
                             <p className="flex items-center">
                                 <FaClock className="mr-2" />
-                                <span className="font-medium inline-block w-40">Investment Horizon:</span> 
+                                <span className="font-medium inline-block w-40">Investment Horizon:</span>
                                 <span>{strategy.investment_horizon} {strategy.investment_horizon === 1 ? 'year' : 'years'}</span>
                             </p>
                         </div>
@@ -230,11 +229,11 @@ export default function StrategyCard({ strategy, onStrategyUpdated }) {
                             <p className="flex items-center">
                                 <FaIndustry className="mr-2" />
                                 <span className="font-medium inline-block w-40">Investment Type:</span>
-                                <span className="ml-2">{strategy.investment_type}</span>
+                                <span>{strategy.investment_type}</span>
                             </p>
                             <p className="flex items-center">
                                 <FaLayerGroup className="mr-2" />
-                                <span className="font-medium inline-block w-40">Diversification:</span> 
+                                <span className="font-medium inline-block w-40">Diversification:</span>
                                 <span>{strategy.diversification_level} / 10</span>
                             </p>
                         </div>

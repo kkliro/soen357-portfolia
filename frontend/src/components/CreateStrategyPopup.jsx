@@ -94,7 +94,7 @@ export default function CreateStrategyPopup({ closeModal, onStrategyCreated }) {
           </div>
           <div>
             <label htmlFor="diversificationLevel" className="block text-sm font-medium text-purple-400">
-              Diversification Level (1-5)
+              Diversification Level (1-10)
             </label>
             <input
               id="diversificationLevel"
